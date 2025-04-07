@@ -2,7 +2,7 @@ import AppRoutes from "./routes/AppRoutes";
 
 function App() {
   return (
-    <div className="font-sans">
+    <div className="min-h-screen">
       <AppRoutes />
     </div>
   );
