@@ -1,9 +1,4 @@
 import { useState } from "react";
-import Layout from "../components/layout/Layout";
-import StepPersonalInfo from "../components/profile/StepPersonalInfo";
-import StepQualifications from "../components/profile/StepQualifications";
-import StepExperience from "../components/profile/StepExperience";
-import StepDocuments from "../components/profile/StepDocuments";
 import axios from "axios";
 
 const steps = ["Personal Info", "Qualifications", "Experience", "Documents"];
@@ -35,12 +30,12 @@ const Profile = () => {
   const handleSubmit = async () => {
     try {
       const data = new FormData();
-      for (const key in formData) {
-        data.append(key, formData[key]);
-      }
+      Object.entries(formData).forEach(([key, value]) => {
+        data.append(key, value);
+      });
 
       const res = await axios.post("http://localhost:5000/api/profile", data);
-      alert("Profile submitted successfully 🎉");
+      alert("Profile submitted successfully ✅");
       console.log(res.data);
     } catch (err) {
       console.error(err);
@@ -50,73 +45,129 @@ const Profile = () => {
 
   const renderStep = () => {
     switch (step) {
-      case 0: return <StepPersonalInfo formData={formData} setFormData={setFormData} />;
-      case 1: return <StepQualifications formData={formData} setFormData={setFormData} />;
-      case 2: return <StepExperience formData={formData} setFormData={setFormData} />;
-      case 3: return <StepDocuments formData={formData} setFormData={setFormData} />;
-      default: return null;
+      case 0:
+        return (
+          <>
+            <input
+              type="text"
+              placeholder="Full Name"
+              value={formData.fullName}
+              onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+              className="w-full px-4 py-2 border rounded-lg"
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              className="w-full px-4 py-2 border rounded-lg"
+            />
+          </>
+        );
+      case 1:
+        return (
+          <>
+            <input
+              type="text"
+              placeholder="Degree"
+              value={formData.degree}
+              onChange={(e) => setFormData({ ...formData, degree: e.target.value })}
+              className="w-full px-4 py-2 border rounded-lg"
+            />
+            <input
+              type="text"
+              placeholder="Institution"
+              value={formData.institution}
+              onChange={(e) => setFormData({ ...formData, institution: e.target.value })}
+              className="w-full px-4 py-2 border rounded-lg"
+            />
+          </>
+        );
+      case 2:
+        return (
+          <>
+            <input
+              type="text"
+              placeholder="Job Title"
+              value={formData.jobTitle}
+              onChange={(e) => setFormData({ ...formData, jobTitle: e.target.value })}
+              className="w-full px-4 py-2 border rounded-lg"
+            />
+            <input
+              type="text"
+              placeholder="Organization"
+              value={formData.organization}
+              onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
+              className="w-full px-4 py-2 border rounded-lg"
+            />
+          </>
+        );
+      case 3:
+        return (
+          <>
+            <label className="block mb-2 text-sm font-medium">Upload CV:</label>
+            <input
+              type="file"
+              onChange={(e) => setFormData({ ...formData, cv: e.target.files[0] })}
+              className="mb-4"
+            />
+          </>
+        );
+      default:
+        return null;
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
-      <Layout>
-        <div className="flex justify-center py-10 px-4">
-          <div className="w-full max-w-3xl bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
-            <h2 className="text-3xl font-bold text-center mb-10 text-gray-800">
-              Faculty Profile
-            </h2>
+    <div className="min-h-screen bg-white px-4 py-10">
+      <div className="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-md border">
+        <h2 className="text-3xl font-bold text-center mb-8">Faculty Profile Setup</h2>
 
-            {/* Stepper */}
-            <div className="flex justify-between items-center mb-10">
-              {steps.map((label, index) => (
-                <div key={index} className="flex flex-col items-center flex-1">
-                  <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
-                      index === step
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-300 text-gray-700"
-                    }`}
-                  >
-                    {index + 1}
-                  </div>
-                  <span className="text-sm text-gray-600 mt-2">{label}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* Step Form */}
-            <div className="space-y-6">{renderStep()}</div>
-
-            {/* Navigation */}
-            <div className="mt-10 flex justify-between">
-              <button
-                onClick={back}
-                disabled={step === 0}
-                className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50"
+        {/* Stepper */}
+        <div className="flex justify-between mb-6">
+          {steps.map((label, i) => (
+            <div key={i} className="flex-1 text-center">
+              <div
+                className={`w-10 h-10 mx-auto rounded-full flex items-center justify-center font-bold text-sm ${
+                  i === step ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
+                }`}
               >
-                ⬅ Back
-              </button>
-
-              {step === steps.length - 1 ? (
-                <button
-                  onClick={handleSubmit}
-                  className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-                >
-                  ✅ Submit
-                </button>
-              ) : (
-                <button
-                  onClick={next}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                >
-                  Next ➡
-                </button>
-              )}
+                {i + 1}
+              </div>
+              <p className="text-xs mt-2 text-gray-600">{label}</p>
             </div>
-          </div>
+          ))}
         </div>
-      </Layout>
+
+        {/* Step Content */}
+        <div className="space-y-4">{renderStep()}</div>
+
+        {/* Navigation Buttons */}
+        <div className="mt-8 flex justify-between">
+          <button
+            onClick={back}
+            disabled={step === 0}
+            className="px-6 py-2 bg-gray-100 border rounded-lg hover:bg-gray-200 disabled:opacity-50"
+          >
+            ⬅ Back
+          </button>
+          {step === steps.length - 1 ? (
+            <button
+              onClick={handleSubmit}
+              className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+            >
+              ✅ Submit
+            </button>
+          ) : (
+            <button
+              onClick={next}
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
+              Next ➡
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
