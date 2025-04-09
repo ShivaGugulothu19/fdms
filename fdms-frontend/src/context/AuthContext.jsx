@@ -1,27 +1,27 @@
-import { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
-export const AuthContext = createContext();
+const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-  }, []);
+  const [user, setUser] = useState(() => {
+    const saved = localStorage.getItem("user");
+    const role = localStorage.getItem("role");
+    if (role === "admin") return { email: "admin@fdms.com", role: "admin" };
+    return saved ? { ...JSON.parse(saved), role } : null;
+  });
 
   const login = (userData) => {
     setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("role", userData.role);
+    if (userData.role !== "admin") {
+      localStorage.setItem("user", JSON.stringify(userData));
+    }
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("user");
-    localStorage.removeItem("isLoggedIn");
+    localStorage.clear();
   };
 
   return (
@@ -31,5 +31,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// ✅ This allows you to import useAuth() directly
 export const useAuth = () => useContext(AuthContext);
