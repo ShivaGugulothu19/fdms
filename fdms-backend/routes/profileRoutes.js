@@ -1,50 +1,40 @@
 const express = require("express");
-const router = express.Router();
-const Profile = require("../models/Profile");
 const multer = require("multer");
+const path = require("path");
+const Profile = require("../models/Profile");
 
-const upload = multer({ dest: "uploads/" });
+const router = express.Router();
 
+// 🗂️ File upload storage setup
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+const upload = multer({ storage });
+
+// 🎯 Handle profile POST
 router.post("/", upload.fields([
   { name: "cv" },
   { name: "degreeCertificate" },
   { name: "appointmentLetter" },
-  { name: "aadharCard" },
-  { name: "panCard" },
 ]), async (req, res) => {
   try {
-    const {
-      fullName, email, phone, gender, dateOfBirth, aadharNumber,
-      panNumber, address, department, designation,
-      qualifications, experience
-    } = req.body;
+    const files = req.files;
 
     const profile = new Profile({
-      fullName,
-      email,
-      phone,
-      gender,
-      dateOfBirth,
-      aadharNumber,
-      panNumber,
-      address,
-      department,
-      designation,
-      qualifications: JSON.parse(qualifications || "[]"),
-      experience: JSON.parse(experience || "[]"),
-      documents: {
-        cv: req.files?.cv?.[0]?.filename || "",
-        degreeCertificate: req.files?.degreeCertificate?.[0]?.filename || "",
-        appointmentLetter: req.files?.appointmentLetter?.[0]?.filename || "",
-        aadharCard: req.files?.aadharCard?.[0]?.filename || "",
-        panCard: req.files?.panCard?.[0]?.filename || "",
-      },
+      ...req.body,
+      cv: files?.cv?.[0]?.filename || "",
+      degreeCertificate: files?.degreeCertificate?.[0]?.filename || "",
+      appointmentLetter: files?.appointmentLetter?.[0]?.filename || "",
     });
 
     await profile.save();
-    res.status(201).json(profile);
+    res.status(201).json({ message: "Profile saved", profile });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Error saving profile", error });
   }
 });

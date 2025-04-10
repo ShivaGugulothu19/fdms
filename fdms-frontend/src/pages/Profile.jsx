@@ -9,6 +9,8 @@ const Profile = () => {
     fullName: "",
     email: "",
     phone: "",
+    address: "",
+    aadhar: "",
     gender: "Male",
     degree: "",
     institution: "",
@@ -62,8 +64,30 @@ const Profile = () => {
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               className="w-full px-4 py-2 border rounded-lg"
             />
+            <input
+              type="text"
+              placeholder="Phone"
+              value={formData.phone}
+              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              className="w-full px-4 py-2 border rounded-lg"
+            />
+            <input
+              type="text"
+              placeholder="Address"
+              value={formData.address}
+              onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+              className="w-full px-4 py-2 border rounded-lg"
+            />
+            <input
+              type="text"
+              placeholder="Aadhar Number"
+              value={formData.aadhar}
+              onChange={(e) => setFormData({ ...formData, aadhar: e.target.value })}
+              className="w-full px-4 py-2 border rounded-lg"
+            />
           </>
         );
+
       case 1:
         return (
           <>
@@ -81,8 +105,23 @@ const Profile = () => {
               onChange={(e) => setFormData({ ...formData, institution: e.target.value })}
               className="w-full px-4 py-2 border rounded-lg"
             />
+            <input
+              type="text"
+              placeholder="Year of Completion"
+              value={formData.year}
+              onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+              className="w-full px-4 py-2 border rounded-lg"
+            />
+            <input
+              type="text"
+              placeholder="Specialization"
+              value={formData.specialization}
+              onChange={(e) => setFormData({ ...formData, specialization: e.target.value })}
+              className="w-full px-4 py-2 border rounded-lg"
+            />
           </>
         );
+
       case 2:
         return (
           <>
@@ -100,19 +139,47 @@ const Profile = () => {
               onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
               className="w-full px-4 py-2 border rounded-lg"
             />
-          </>
-        );
-      case 3:
-        return (
-          <>
-            <label className="block mb-2 text-sm font-medium">Upload CV:</label>
             <input
-              type="file"
-              onChange={(e) => setFormData({ ...formData, cv: e.target.files[0] })}
-              className="mb-4"
+              type="date"
+              placeholder="Start Date"
+              value={formData.startDate}
+              onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+              className="w-full px-4 py-2 border rounded-lg"
+            />
+            <input
+              type="date"
+              placeholder="End Date"
+              value={formData.endDate}
+              onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+              className="w-full px-4 py-2 border rounded-lg"
             />
           </>
         );
+
+      case 3:
+        return (
+          <>
+            <label className="block mb-2">Upload CV</label>
+            <input
+              type="file"
+              onChange={(e) => setFormData({ ...formData, cv: e.target.files[0] })}
+              className="w-full"
+            />
+            <label className="block my-2">Degree Certificate</label>
+            <input
+              type="file"
+              onChange={(e) => setFormData({ ...formData, degreeCertificate: e.target.files[0] })}
+              className="w-full"
+            />
+            <label className="block my-2">Appointment Letter</label>
+            <input
+              type="file"
+              onChange={(e) => setFormData({ ...formData, appointmentLetter: e.target.files[0] })}
+              className="w-full"
+            />
+          </>
+        );
+
       default:
         return null;
     }
@@ -123,7 +190,7 @@ const Profile = () => {
       <div className="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-md border">
         <h2 className="text-3xl font-bold text-center mb-8">Faculty Profile Setup</h2>
 
-        {/* Stepper */}
+        {/* Stepper UI */}
         <div className="flex justify-between mb-6">
           {steps.map((label, i) => (
             <div key={i} className="flex-1 text-center">
@@ -139,10 +206,8 @@ const Profile = () => {
           ))}
         </div>
 
-        {/* Step Content */}
         <div className="space-y-4">{renderStep()}</div>
 
-        {/* Navigation Buttons */}
         <div className="mt-8 flex justify-between">
           <button
             onClick={back}

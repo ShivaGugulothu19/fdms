@@ -12,16 +12,18 @@ import AdminSettings from "../pages/AdminSettings";
 import Layout from "../components/layout/Layout";
 import AdminLayout from "../components/layout/AdminLayout";
 
-const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-const role = localStorage.getItem("role");
-
 const AppRoutes = () => {
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const role = localStorage.getItem("role");
+
   return (
     <Routes>
+      {/* Public */}
       <Route path="/" element={<Register />} />
       <Route path="/login" element={<Login />} />
       <Route path="/admin" element={<AdminLogin />} />
 
+      {/* Faculty Layout */}
       {isLoggedIn && role === "faculty" && (
         <Route element={<Layout />}>
           <Route path="/dashboard" element={<Dashboard />} />
@@ -29,6 +31,7 @@ const AppRoutes = () => {
         </Route>
       )}
 
+      {/* Admin Layout */}
       {isLoggedIn && role === "admin" && (
         <Route element={<AdminLayout />}>
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
@@ -39,8 +42,8 @@ const AppRoutes = () => {
         </Route>
       )}
 
-      {/* fallback */}
-      <Route path="*" element={<Navigate to="/" />} />
+      {/* Fallback to register if route not matched */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };

@@ -1,11 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 
 const AdminLogin = () => {
-  const { login } = useAuth();
   const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -13,10 +10,11 @@ const AdminLogin = () => {
     e.preventDefault();
 
     if (email === "admin@fdms.com" && password === "admin123") {
-      login({ role: "admin", email });
-      navigate("/admin/dashboard");
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("role", "admin");
+      window.location.href = "/admin/dashboard"; // ✅ use full reload to ensure routing works
     } else {
-      alert("Invalid credentials");
+      alert("Invalid credentials ❌");
     }
   };
 
