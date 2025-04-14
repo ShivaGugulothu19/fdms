@@ -8,6 +8,8 @@ import AdminDashboard from "../pages/AdminDashboard";
 import AdminFacultyProfile from "../pages/AdminFacultyProfile";
 import AdminReports from "../pages/AdminReports";
 import AdminSettings from "../pages/AdminSettings";
+import FacultyResearch from "../pages/FacultyResearch";
+import AdminResearchList from "../pages/AdminResearchList";
 
 import Layout from "../components/layout/Layout";
 import AdminLayout from "../components/layout/AdminLayout";
@@ -18,7 +20,7 @@ const AppRoutes = () => {
 
   return (
     <Routes>
-      {/* Public */}
+      {/* Public Routes */}
       <Route path="/" element={<Register />} />
       <Route path="/login" element={<Login />} />
       <Route path="/admin" element={<AdminLogin />} />
@@ -28,6 +30,7 @@ const AppRoutes = () => {
         <Route element={<Layout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/research" element={<FacultyResearch />} />
         </Route>
       )}
 
@@ -39,10 +42,11 @@ const AppRoutes = () => {
           <Route path="/admin/faculty-profile" element={<AdminFacultyProfile />} />
           <Route path="/admin/reports" element={<AdminReports />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
+          <Route path="/admin/research" element={<AdminResearchList />} />
         </Route>
       )}
 
-      {/* Fallback to register if route not matched */}
+      {/* Catch-all */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

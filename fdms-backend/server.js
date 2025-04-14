@@ -15,6 +15,8 @@ app.use(express.json());
 // Routes
 app.use("/api/faculty", require("./routes/facultyRoutes"));
 app.use("/api/profile", require("./routes/profileRoutes"));
+app.use("/api/research", require("./routes/researchRoutes"));
+
 
 // Test route
 app.get("/", (req, res) => res.send("FDMS Backend Running ✅"));

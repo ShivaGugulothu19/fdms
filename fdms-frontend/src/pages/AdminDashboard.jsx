@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const AdminDashboard = () => {
   const [facultyList, setFacultyList] = useState([]);
@@ -7,7 +8,6 @@ const AdminDashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [department, setDepartment] = useState("");
 
-  // 🔄 Fetch all faculty
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -19,27 +19,25 @@ const AdminDashboard = () => {
         alert("Error fetching faculty");
       }
     };
-
     fetchData();
   }, []);
 
-  // 🔍 Filter logic
   useEffect(() => {
-    let filteredData = facultyList;
+    let results = facultyList;
 
     if (searchTerm) {
-      filteredData = filteredData.filter((f) =>
+      results = results.filter((f) =>
         f.fullName.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     if (department) {
-      filteredData = filteredData.filter((f) =>
+      results = results.filter((f) =>
         f.department.toLowerCase() === department.toLowerCase()
       );
     }
 
-    setFiltered(filteredData);
+    setFiltered(results);
   }, [searchTerm, department, facultyList]);
 
   const handleDelete = async (id) => {
@@ -59,7 +57,42 @@ const AdminDashboard = () => {
     <div className="bg-white p-6 rounded-lg shadow">
       <h2 className="text-3xl font-bold mb-6 text-blue-700">👨‍💼 Admin Dashboard</h2>
 
-      {/* 🔎 Search and Filter */}
+      {/* 🔳 Dashboard Cards */}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
+        <Link
+          to="/admin/faculty-profile"
+          className="bg-white p-6 rounded-xl shadow border border-gray-200 hover:shadow-lg transition"
+        >
+          <h3 className="text-xl font-semibold text-gray-800 mb-2">👩‍🏫 Faculty Profiles</h3>
+          <p className="text-gray-600">Manage and update all faculty details.</p>
+        </Link>
+
+        <Link
+          to="/admin/research"
+          className="bg-white p-6 rounded-xl shadow border border-gray-200 hover:shadow-lg transition"
+        >
+          <h3 className="text-xl font-semibold text-gray-800 mb-2">📚 Research</h3>
+          <p className="text-gray-600">View faculty research publications.</p>
+        </Link>
+
+        <Link
+          to="/admin/reports"
+          className="bg-white p-6 rounded-xl shadow border border-gray-200 hover:shadow-lg transition"
+        >
+          <h3 className="text-xl font-semibold text-gray-800 mb-2">📈 Reports</h3>
+          <p className="text-gray-600">Generate and download reports.</p>
+        </Link>
+
+        <Link
+          to="/admin/settings"
+          className="bg-white p-6 rounded-xl shadow border border-gray-200 hover:shadow-lg transition"
+        >
+          <h3 className="text-xl font-semibold text-gray-800 mb-2">⚙️ Settings</h3>
+          <p className="text-gray-600">Customize access and portal config.</p>
+        </Link>
+      </div>
+
+      {/* 🔍 Filters */}
       <div className="mb-6 flex flex-col md:flex-row items-center gap-4">
         <input
           type="text"
@@ -121,5 +154,4 @@ const AdminDashboard = () => {
     </div>
   );
 };
-
 export default AdminDashboard;
