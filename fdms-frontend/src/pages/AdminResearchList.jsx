@@ -1,79 +1,79 @@
+// src/pages/admin/AdminResearch.jsx
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const AdminResearchList = () => {
-  const [researchList, setResearchList] = useState([]);
+const AdminResearch = () => {
+  const [allResearch, setAllResearch] = useState([]);
+  const [search, setSearch] = useState("");
+  const [typeFilter, setTypeFilter] = useState("");
 
-  const fetchResearch = async () => {
+  const fetchAllResearch = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/research");
-      setResearchList(res.data);
+      const res = await axios.get("/api/research");
+      setAllResearch(res.data);
     } catch (err) {
       console.error(err);
-      alert("Could not fetch research data");
+      alert("Error loading research data");
     }
   };
 
   useEffect(() => {
-    fetchResearch();
+    fetchAllResearch();
   }, []);
 
-  const handleDelete = async (id) => {
-    const confirm = window.confirm("Delete this research entry?");
-    if (!confirm) return;
-
-    try {
-      await axios.delete(`http://localhost:5000/api/research/${id}`);
-      setResearchList((prev) => prev.filter((r) => r._id !== id));
-    } catch (err) {
-      console.error(err);
-      alert("Deletion failed");
-    }
-  };
+  const filteredResearch = allResearch.filter((r) => {
+    const matchTitle = r.title.toLowerCase().includes(search.toLowerCase());
+    const matchName = r.facultyId?.fullName.toLowerCase().includes(search.toLowerCase());
+    const matchType = typeFilter ? r.type === typeFilter : true;
+    return (matchTitle || matchName) && matchType;
+  });
 
   return (
-    <div className="p-6 bg-white shadow rounded-xl">
-      <h2 className="text-2xl font-bold text-blue-700 mb-6">📚 Research Contributions</h2>
+    <div className="p-6">
+      <h2 className="text-2xl font-bold mb-4">All Research Contributions</h2>
 
-      {researchList.length === 0 ? (
-        <p>No research contributions yet.</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full border">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="border px-4 py-2">Title</th>
-                <th className="border px-4 py-2">Author</th>
-                <th className="border px-4 py-2">Type</th>
-                <th className="border px-4 py-2">Year</th>
-                <th className="border px-4 py-2">Citations</th>
-                <th className="border px-4 py-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {researchList.map((res) => (
-                <tr key={res._id}>
-                  <td className="border px-4 py-2">{res.title}</td>
-                  <td className="border px-4 py-2">{res.facultyId?.fullName}</td>
-                  <td className="border px-4 py-2">{res.type}</td>
-                  <td className="border px-4 py-2">{res.year}</td>
-                  <td className="border px-4 py-2">{res.citationCount}</td>
-                  <td className="border px-4 py-2">
-                    <button
-                      className="text-red-600 hover:underline"
-                      onClick={() => handleDelete(res._id)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+      <div className="flex flex-col md:flex-row gap-4 mb-6">
+        <input
+          type="text"
+          placeholder="Search by title or faculty name"
+          className="border p-2 rounded w-full"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <select
+          className="border p-2 rounded"
+          value={typeFilter}
+          onChange={(e) => setTypeFilter(e.target.value)}
+        >
+          <option value="">All Types</option>
+          <option value="Journal">Journal</option>
+          <option value="Conference">Conference</option>
+          <option value="Book Chapter">Book Chapter</option>
+          <option value="Patent">Patent</option>
+        </select>
+      </div>
+
+      <ul className="space-y-3">
+        {filteredResearch.map((r) => (
+          <li key={r._id} className="border p-4 rounded shadow">
+            <div className="font-semibold text-lg">{r.title}</div>
+            <div className="text-sm text-gray-600">
+              <span className="italic">{r.type}</span> — {r.journalName || "N/A"}
+              <br />
+              Faculty: {r.facultyId?.fullName} ({r.facultyId?.department})<br />
+              Published: {r.publicationDate?.slice(0, 10)}
+              {r.doiLink && (
+                <>
+                  <br />
+                  DOI: <a href={r.doiLink} target="_blank" rel="noreferrer" className="text-blue-600 underline">{r.doiLink}</a>
+                </>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
 
-export default AdminResearchList;
+export default AdminResearch;

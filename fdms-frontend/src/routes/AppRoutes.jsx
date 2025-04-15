@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+
 import Register from "../pages/Register";
 import Profile from "../pages/Profile";
 import Dashboard from "../pages/Dashboard";
@@ -8,8 +9,8 @@ import AdminDashboard from "../pages/AdminDashboard";
 import AdminFacultyProfile from "../pages/AdminFacultyProfile";
 import AdminReports from "../pages/AdminReports";
 import AdminSettings from "../pages/AdminSettings";
-import FacultyResearch from "../pages/FacultyResearch";
-import AdminResearchList from "../pages/AdminResearchList";
+import FacultyResearch from "../pages/faculty/FacultyResearch";
+import AdminResearch from "../pages/admin/AdminResearch";
 
 import Layout from "../components/layout/Layout";
 import AdminLayout from "../components/layout/AdminLayout";
@@ -42,11 +43,11 @@ const AppRoutes = () => {
           <Route path="/admin/faculty-profile" element={<AdminFacultyProfile />} />
           <Route path="/admin/reports" element={<AdminReports />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
-          <Route path="/admin/research" element={<AdminResearchList />} />
+          <Route path="/admin/research" element={<AdminResearch />} />
         </Route>
       )}
 
-      {/* Catch-all */}
+      {/* Catch-all redirect */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
