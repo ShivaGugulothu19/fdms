@@ -7,11 +7,14 @@ const AdminDashboard = () => {
   const [filtered, setFiltered] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [department, setDepartment] = useState("");
+  const role = localStorage.getItem("role");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/faculty");
+        const res = await axios.get("http://localhost:5000/api/faculty", {
+          headers: { "x-role": role },
+        });
         setFacultyList(res.data);
         setFiltered(res.data);
       } catch (err) {
@@ -20,32 +23,32 @@ const AdminDashboard = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [role]);
 
   useEffect(() => {
     let results = facultyList;
-
     if (searchTerm) {
       results = results.filter((f) =>
         f.fullName.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-
     if (department) {
-      results = results.filter((f) =>
-        f.department.toLowerCase() === department.toLowerCase()
+      results = results.filter(
+        (f) => f.department.toLowerCase() === department.toLowerCase()
       );
     }
-
     setFiltered(results);
   }, [searchTerm, department, facultyList]);
 
   const handleDelete = async (id) => {
+    if (role !== "admin") return;
     const confirm = window.confirm("Are you sure you want to delete this faculty?");
     if (!confirm) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/faculty/${id}`);
+      await axios.delete(`http://localhost:5000/api/faculty/${id}`, {
+        headers: { "x-role": role },
+      });
       setFacultyList((prev) => prev.filter((f) => f._id !== id));
     } catch (err) {
       console.error(err);
@@ -57,43 +60,28 @@ const AdminDashboard = () => {
     <div className="bg-white p-6 rounded-lg shadow">
       <h2 className="text-3xl font-bold mb-6 text-blue-700">👨‍💼 Admin Dashboard</h2>
 
-      {/* 🔳 Dashboard Cards */}
+      {/* Cards */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
-        <Link
-          to="/admin/faculty-profile"
-          className="bg-white p-6 rounded-xl shadow border border-gray-200 hover:shadow-lg transition"
-        >
-          <h3 className="text-xl font-semibold text-gray-800 mb-2">👩‍🏫 Faculty Profiles</h3>
-          <p className="text-gray-600">Manage and update all faculty details.</p>
+        <Link to="/admin/faculty-profile" className="bg-white p-6 rounded-xl shadow border">
+          <h3 className="text-xl font-semibold">👩‍🏫 Faculty Profiles</h3>
+          <p>Manage and update all faculty details.</p>
         </Link>
-
-        <Link
-          to="/admin/research"
-          className="bg-white p-6 rounded-xl shadow border border-gray-200 hover:shadow-lg transition"
-        >
-          <h3 className="text-xl font-semibold text-gray-800 mb-2">📚 Research</h3>
-          <p className="text-gray-600">View faculty research publications.</p>
+        <Link to="/admin/research" className="bg-white p-6 rounded-xl shadow border">
+          <h3 className="text-xl font-semibold">📚 Research</h3>
+          <p>View faculty research publications.</p>
         </Link>
-
-        <Link
-          to="/admin/reports"
-          className="bg-white p-6 rounded-xl shadow border border-gray-200 hover:shadow-lg transition"
-        >
-          <h3 className="text-xl font-semibold text-gray-800 mb-2">📈 Reports</h3>
-          <p className="text-gray-600">Generate and download reports.</p>
+        <Link to="/admin/reports" className="bg-white p-6 rounded-xl shadow border">
+          <h3 className="text-xl font-semibold">📈 Reports</h3>
+          <p>Generate and download reports.</p>
         </Link>
-
-        <Link
-          to="/admin/settings"
-          className="bg-white p-6 rounded-xl shadow border border-gray-200 hover:shadow-lg transition"
-        >
-          <h3 className="text-xl font-semibold text-gray-800 mb-2">⚙️ Settings</h3>
-          <p className="text-gray-600">Customize access and portal config.</p>
+        <Link to="/admin/settings" className="bg-white p-6 rounded-xl shadow border">
+          <h3 className="text-xl font-semibold">⚙️ Settings</h3>
+          <p>Customize access and portal config.</p>
         </Link>
       </div>
 
-      {/* 🔍 Filters */}
-      <div className="mb-6 flex flex-col md:flex-row items-center gap-4">
+      {/* Filters */}
+      <div className="mb-6 flex flex-col md:flex-row gap-4">
         <input
           type="text"
           placeholder="Search by name..."
@@ -114,7 +102,7 @@ const AdminDashboard = () => {
         </select>
       </div>
 
-      {/* 📋 Table */}
+      {/* Table */}
       {filtered.length === 0 ? (
         <p className="text-gray-600">No faculty found.</p>
       ) : (
@@ -137,13 +125,18 @@ const AdminDashboard = () => {
                   <td className="px-4 py-2 border">{faculty.phone}</td>
                   <td className="px-4 py-2 border">{faculty.department}</td>
                   <td className="px-4 py-2 border text-center">
-                    <button
-                      className="text-red-600 hover:underline mr-4"
-                      onClick={() => handleDelete(faculty._id)}
-                    >
-                      Delete
-                    </button>
-                    <button className="text-blue-600 hover:underline">Edit</button>
+                    {role === "admin" && (
+                      <>
+                        <button
+                          className="text-red-600 hover:underline mr-4"
+                          onClick={() => handleDelete(faculty._id)}
+                        >
+                          Delete
+                        </button>
+                        <button className="text-blue-600 hover:underline">Edit</button>
+                      </>
+                    )}
+                    {role === "hod" && <span className="text-gray-400">View-only</span>}
                   </td>
                 </tr>
               ))}
@@ -154,4 +147,5 @@ const AdminDashboard = () => {
     </div>
   );
 };
+
 export default AdminDashboard;

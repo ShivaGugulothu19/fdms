@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Faculty = require("../models/Faculty");
+const authorizeRoles = require("../middleware/authorizeRole");
 
 // ➕ Register new faculty
 router.post("/", async (req, res) => {
@@ -13,7 +14,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// 🔐 Login faculty
+// 🔐 Login faculty/admin/hod
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -29,7 +30,7 @@ router.post("/login", async (req, res) => {
         _id: faculty._id,
         fullName: faculty.fullName,
         email: faculty.email,
-        role: "faculty",
+        role: faculty.role,
       },
     });
   } catch (error) {
@@ -37,8 +38,8 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// 📥 Get all faculty
-router.get("/", async (req, res) => {
+// 📥 Get all faculty (admin & hod)
+router.get("/", authorizeRoles("admin", "hod"), async (req, res) => {
   try {
     const facultyList = await Faculty.find();
     res.status(200).json(facultyList);
@@ -47,8 +48,8 @@ router.get("/", async (req, res) => {
   }
 });
 
-// ❌ Delete faculty by ID
-router.delete("/:id", async (req, res) => {
+// ❌ Delete faculty by ID (admin only)
+router.delete("/:id", authorizeRoles("admin"), async (req, res) => {
   try {
     const deleted = await Faculty.findByIdAndDelete(req.params.id);
     if (!deleted) {

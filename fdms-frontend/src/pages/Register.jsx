@@ -10,7 +10,7 @@ const Register = () => {
     email: "",
     phone: "",
     department: "",
-    password: "", // ✅ Added password
+    password: "",
   });
 
   const handleChange = (e) => {
@@ -116,6 +116,12 @@ const Register = () => {
               className="bg-gray-100 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 transition text-sm font-medium"
             >
               👨‍🏫 Login as Faculty
+            </Link>
+            <Link
+              to="/login?role=hod"
+              className="bg-purple-100 text-purple-800 px-4 py-2 rounded-lg hover:bg-purple-200 transition text-sm font-medium"
+            >
+              🧑‍💼 Login as HOD
             </Link>
             <Link
               to="/admin"

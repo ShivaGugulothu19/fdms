@@ -1,109 +1,96 @@
+// src/pages/FacultyResearch.jsx
 import { useState } from "react";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 
 const FacultyResearch = () => {
-  const [formData, setFormData] = useState({
+  const { user } = useAuth(); // <-- using custom hook
+  const [form, setForm] = useState({
     title: "",
-    journal: "",
-    year: "",
-    type: "Journal",
-    citationCount: 0,
-    doi: "",
+    type: "",
+    journalName: "",
+    publicationDate: "",
+    doiLink: "",
   });
 
-  const user = JSON.parse(localStorage.getItem("user"));
-
   const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      await axios.post("http://localhost:5000/api/research", {
-        ...formData,
-        facultyId: user._id,
-      });
-      alert("Research added ✅");
-      setFormData({
+      const payload = {
+        ...form,
+        facultyId: user?.id, // optional chaining for safety
+      };
+      await axios.post("/api/research", payload);
+      alert("Research submitted successfully!");
+      setForm({
         title: "",
-        journal: "",
-        year: "",
-        type: "Journal",
-        citationCount: 0,
-        doi: "",
+        type: "",
+        journalName: "",
+        publicationDate: "",
+        doiLink: "",
       });
     } catch (err) {
       console.error(err);
-      alert("Something went wrong ❌");
+      alert("Submission failed!");
     }
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-12 bg-white p-8 shadow-xl rounded-xl">
-      <h2 className="text-3xl font-bold text-blue-700 mb-6">Add Research Contribution</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="p-6">
+      <h2 className="text-2xl font-bold mb-4">Submit Your Research</h2>
+      <form onSubmit={handleSubmit} className="space-y-4 max-w-xl">
         <input
-          type="text"
           name="title"
           placeholder="Research Title"
-          value={formData.title}
+          value={form.title}
           onChange={handleChange}
           required
-          className="w-full p-3 border rounded"
-        />
-        <input
-          type="text"
-          name="journal"
-          placeholder="Journal / Conference Name"
-          value={formData.journal}
-          onChange={handleChange}
-          required
-          className="w-full p-3 border rounded"
-        />
-        <input
-          type="number"
-          name="year"
-          placeholder="Year"
-          value={formData.year}
-          onChange={handleChange}
-          required
-          className="w-full p-3 border rounded"
+          className="w-full border p-2 rounded"
         />
         <select
           name="type"
-          value={formData.type}
+          value={form.type}
           onChange={handleChange}
-          className="w-full p-3 border rounded"
+          required
+          className="w-full border p-2 rounded"
         >
+          <option value="">Select Type</option>
           <option value="Journal">Journal</option>
           <option value="Conference">Conference</option>
+          <option value="Book Chapter">Book Chapter</option>
+          <option value="Patent">Patent</option>
         </select>
         <input
-          type="number"
-          name="citationCount"
-          placeholder="Citation Count"
-          value={formData.citationCount}
+          name="journalName"
+          placeholder="Journal Name"
+          value={form.journalName}
           onChange={handleChange}
-          className="w-full p-3 border rounded"
+          className="w-full border p-2 rounded"
         />
         <input
-          type="text"
-          name="doi"
-          placeholder="DOI (optional)"
-          value={formData.doi}
+          type="date"
+          name="publicationDate"
+          value={form.publicationDate}
           onChange={handleChange}
-          className="w-full p-3 border rounded"
+          required
+          className="w-full border p-2 rounded"
+        />
+        <input
+          name="doiLink"
+          placeholder="DOI Link"
+          value={form.doiLink}
+          onChange={handleChange}
+          className="w-full border p-2 rounded"
         />
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
-          ➕ Add Research
+          Submit
         </button>
       </form>
     </div>

@@ -21,7 +21,7 @@ const ProfileSchema = new mongoose.Schema({
   endDate: String,
   isCurrent: Boolean,
 
-  // Files
+  // Uploaded Documents
   cv: String,
   degreeCertificate: String,
   appointmentLetter: String,

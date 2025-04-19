@@ -1,6 +1,7 @@
-import { createContext, useContext, useState, useEffect } from "react";
+// src/context/AuthContext.jsx
+import { createContext, useContext, useState } from "react";
 
-const AuthContext = createContext();
+export const AuthContext = createContext(); // <-- this fixes the import issue
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {

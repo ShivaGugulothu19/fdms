@@ -1,46 +1,16 @@
-// routes/researchRoutes.js
 const express = require("express");
-const router = express.Router();
 const Research = require("../models/Research");
+const authorizeRoles = require("../middleware/authorizeRole");
 
-// POST - Add research
-router.post("/", async (req, res) => {
-  try {
-    const research = new Research(req.body);
-    await research.save();
-    res.status(201).json(research);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
+const router = express.Router();
 
-// GET - All research
-router.get("/", async (req, res) => {
+// 📖 GET all research (admin & hod)
+router.get("/", authorizeRoles("admin", "hod"), async (req, res) => {
   try {
-    const all = await Research.find().populate("facultyId", "fullName department");
-    res.json(all);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// GET - Research by facultyId
-router.get("/faculty/:id", async (req, res) => {
-  try {
-    const research = await Research.find({ facultyId: req.params.id });
-    res.json(research);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// DELETE - Research entry
-router.delete("/:id", async (req, res) => {
-  try {
-    await Research.findByIdAndDelete(req.params.id);
-    res.json({ message: "Research deleted" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    const researchList = await Research.find().populate("facultyId");
+    res.json(researchList);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch research" });
   }
 });
 
