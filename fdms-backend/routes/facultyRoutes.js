@@ -5,6 +5,31 @@ const authorizeRoles = require("../middleware/authorizeRole");
 
 // ➕ Register new faculty
 router.post("/", async (req, res) => {
+  const allowedDepartments = [
+    "Computer Science and Engineering",
+    "Information Technology",
+    "Electronics and Communication Engineering",
+    "Electrical and Electronics Engineering",
+    "Mechanical Engineering",
+    "Civil Engineering",
+    "Artificial Intelligence and Data Science",
+    "Cyber Security",
+    "Mathematics",
+    "Physics",
+    "Chemistry",
+    "English",
+    "Management Studies",
+    "Humanities",
+    "Architecture",
+    "Biomedical Engineering",
+    "Environmental Engineering",
+    "Aerospace Engineering"
+  ];
+
+  if (!allowedDepartments.includes(req.body.department)) {
+    return res.status(400).json({ message: "Invalid department selected" });
+  }
+
   try {
     const newFaculty = new Faculty(req.body);
     await newFaculty.save();

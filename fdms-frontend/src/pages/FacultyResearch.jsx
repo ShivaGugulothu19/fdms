@@ -19,11 +19,20 @@ const FacultyResearch = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const payload = {
+      ...form,
+      facultyId: user?.id || user?._id, // safety check for both 'id' and '_id'
+    };
+
+    console.log("Submitting Research Payload:", payload); // 🔍 debug
+
+    if (!payload.facultyId) {
+      alert("User ID not found. Please re-login.");
+      return;
+    }
+
     try {
-      const payload = {
-        ...form,
-        facultyId: user?.id, // optional chaining for safety
-      };
       await axios.post("/api/research", payload);
       alert("Research submitted successfully!");
       setForm({
@@ -34,7 +43,7 @@ const FacultyResearch = () => {
         doiLink: "",
       });
     } catch (err) {
-      console.error(err);
+      console.error("Error submitting research:", err);
       alert("Submission failed!");
     }
   };
