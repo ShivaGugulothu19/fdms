@@ -12,7 +12,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // ✅ Hardcoded Admin login
+    // 🔐 Hardcoded Admin (for dev only)
     if (email === "admin@fdms.com" && password === "admin123") {
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("role", "admin");
@@ -21,16 +21,6 @@ const Login = () => {
       return;
     }
 
-    // ✅ Hardcoded HOD login
-    if (email === "hod@fdms.com" && password === "hod123") {
-      localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("role", "hod");
-      localStorage.setItem("user", JSON.stringify({ email, fullName: "HOD", role: "hod" }));
-      window.location.href = "/hod/dashboard";
-      return;
-    }
-
-    // ✅ Faculty login via backend
     try {
       const res = await axios.post("http://localhost:5000/api/faculty/login", {
         email,

@@ -56,6 +56,7 @@ router.post("/login", async (req, res) => {
         fullName: faculty.fullName,
         email: faculty.email,
         role: faculty.role,
+        department: faculty.department,
       },
     });
   } catch (error) {
@@ -63,11 +64,37 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// 📥 Get all faculty (admin & hod)
+// 📥 Get all faculty (admin = all, hod = only their department)
 router.get("/", authorizeRoles("admin", "hod"), async (req, res) => {
   try {
-    const facultyList = await Faculty.find();
+    let facultyList;
+
+    if (req.user.role === "hod") {
+      facultyList = await Faculty.find({ department: req.user.department });
+    } else {
+      facultyList = await Faculty.find();
+    }
+
     res.status(200).json(facultyList);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching faculty", error });
+  }
+});
+
+// 👤 Get faculty profile by ID (admin or HOD only)
+router.get("/:id", authorizeRoles("admin", "hod"), async (req, res) => {
+  try {
+    const faculty = await Faculty.findById(req.params.id);
+    if (!faculty) {
+      return res.status(404).json({ message: "Faculty not found" });
+    }
+
+    // 🛡️ HODs can only access profiles from their own department
+    if (req.user.role === "hod" && faculty.department !== req.user.department) {
+      return res.status(403).json({ message: "Access denied: Not your department" });
+    }
+
+    res.status(200).json(faculty);
   } catch (error) {
     res.status(500).json({ message: "Error fetching faculty", error });
   }
