@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
 // Public & Common
+import Landing from "../pages/Landing";
 import Register from "../pages/Register";
 import Login from "../pages/Login";
 import AdminLogin from "../pages/AdminLogin";
@@ -35,7 +36,8 @@ const AppRoutes = () => {
   return (
     <Routes>
       {/* Public Routes */}
-      <Route path="/" element={<Register />} />
+      <Route path="/" element={<Landing />} />
+      <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
       <Route path="/admin" element={<AdminLogin />} />
 
