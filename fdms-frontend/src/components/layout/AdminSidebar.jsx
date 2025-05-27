@@ -6,13 +6,20 @@ const AdminSidebar = () => {
   const basePath = role === "hod" ? "/hod" : "/admin";
 
   const linkStyle = (path) =>
-    `block px-4 py-2 rounded hover:bg-blue-100 ${
-      pathname === path ? "bg-blue-200 font-semibold" : "text-gray-700"
+    `block px-4 py-2 rounded transition-colors duration-200 ${
+      pathname === path
+        ? "bg-gray-800 text-white font-semibold"
+        : "text-gray-300 hover:bg-gray-700 hover:text-white"
     }`;
 
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.href = role === "admin" ? "/admin" : "/login?role=hod";
+  };
+
   return (
-    <aside className="w-64 bg-white shadow border-r border-gray-200 p-4 hidden md:block">
-      <h2 className="text-xl font-bold text-blue-600 mb-6">
+    <aside className="w-64 bg-gray-950 text-white shadow-lg border-r border-gray-800 p-4 hidden md:block">
+      <h2 className="text-xl font-bold text-white mb-6">
         {role === "hod" ? "🏫 HOD Panel" : "🛡️ Admin Panel"}
       </h2>
       <nav className="space-y-2">
@@ -20,9 +27,11 @@ const AdminSidebar = () => {
           📊 Dashboard
         </Link>
 
-        {/* ✅ Faculty Profiles for both admin & hod */}
         {(role === "admin" || role === "hod") && (
-          <Link to={`${basePath}/faculty-profile`} className={linkStyle(`${basePath}/faculty-profile`)}>
+          <Link
+            to={`${basePath}/faculty-profile`}
+            className={linkStyle(`${basePath}/faculty-profile`)}
+          >
             👩‍🏫 Faculty Profiles
           </Link>
         )}
@@ -31,16 +40,18 @@ const AdminSidebar = () => {
           📄 Reports
         </Link>
 
-        {/* ⚙️ Settings only for admin */}
         {role === "admin" && (
           <Link to={`${basePath}/settings`} className={linkStyle(`${basePath}/settings`)}>
             ⚙️ Settings
           </Link>
         )}
 
-        <Link to={`${basePath}/profile`} className={linkStyle(`${basePath}/profile`)}>
-          👤 {role === "hod" ? "HOD" : "Admin"} Profile
-        </Link>
+        <button
+          onClick={handleLogout}
+          className="w-full text-left block px-4 py-2 rounded text-red-400 hover:bg-red-600 hover:text-white transition-colors duration-200"
+        >
+          🚪 Logout
+        </button>
       </nav>
     </aside>
   );

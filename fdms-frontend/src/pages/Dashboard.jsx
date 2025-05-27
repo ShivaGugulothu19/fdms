@@ -5,40 +5,47 @@ const Dashboard = () => {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen px-6 py-12">
-      <h2 className="text-3xl font-bold mb-8 text-blue-700">📊 Dashboard</h2>
+    <div className="min-h-screen bg-base-200 p-6">
+      <div className="card bg-base-100 shadow-lg p-8" data-theme="light">
+        <h2 className="text-3xl font-bold text-primary mb-8">📊 {user?.role === "admin" ? "Admin Dashboard" : "Faculty Dashboard"}</h2>
 
-      {user?.role === "admin" ? (
-        <>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <Link to="/admin/faculty-profile" className="bg-white p-6 rounded-xl shadow border border-gray-200 hover:shadow-lg transition">
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">👩‍🏫 Faculty Profiles</h3>
-              <p className="text-gray-600">Manage and update all faculty-related information.</p>
-            </Link>
+        {user?.role === "admin" ? (
+          <>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              <Link to="/admin/faculty-profile" className="card bg-base-100 border shadow hover:shadow-md transition">
+                <div className="card-body">
+                  <h3 className="card-title text-blue-600">👩‍🏫 Faculty Profiles</h3>
+                  <p>Manage and update all faculty-related information.</p>
+                </div>
+              </Link>
 
-            <Link to="/admin/reports" className="bg-white p-6 rounded-xl shadow border border-gray-200 hover:shadow-lg transition">
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">📈 Reports</h3>
-              <p className="text-gray-600">View and download compliance reports.</p>
-            </Link>
+              <Link to="/admin/reports" className="card bg-base-100 border shadow hover:shadow-md transition">
+                <div className="card-body">
+                  <h3 className="card-title text-blue-600">📈 Reports</h3>
+                  <p>View and download compliance reports.</p>
+                </div>
+              </Link>
 
-            <Link to="/admin/settings" className="bg-white p-6 rounded-xl shadow border border-gray-200 hover:shadow-lg transition">
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">⚙️ Settings</h3>
-              <p className="text-gray-600">Customize portal and access management.</p>
-            </Link>
+              <Link to="/admin/settings" className="card bg-base-100 border shadow hover:shadow-md transition">
+                <div className="card-body">
+                  <h3 className="card-title text-blue-600">⚙️ Settings</h3>
+                  <p>Customize portal and access management.</p>
+                </div>
+              </Link>
+            </div>
+
+            <div className="mt-10 text-center">
+              <Link to="/register" className="btn btn-outline btn-primary">
+                ➕ Register New Faculty
+              </Link>
+            </div>
+          </>
+        ) : (
+          <div className="text-center">
+            <p className="text-lg text-gray-600">🎓 Welcome to your faculty dashboard!</p>
           </div>
-
-          <div className="mt-10 text-center">
-            <Link
-              to="/register"
-              className="inline-block text-blue-600 text-lg font-medium underline hover:text-blue-800"
-            >
-              ➕ Register New Faculty
-            </Link>
-          </div>
-        </>
-      ) : (
-        <p className="text-lg text-gray-600 mt-8">🎓 Welcome to your faculty dashboard!</p>
-      )}
+        )}
+      </div>
     </div>
   );
 };

@@ -1,15 +1,18 @@
 const HODProfile = () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-  
-    return (
-      <div className="p-6 bg-white rounded shadow">
-        <h1 className="text-2xl font-bold text-blue-700 mb-4">👤 HOD Profile</h1>
-        <p><strong>Name:</strong> {user?.fullName || "N/A"}</p>
-        <p><strong>Email:</strong> {user?.email || "N/A"}</p>
-        <p><strong>Role:</strong> HOD</p>
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  return (
+    <div className="p-6 bg-base-200 min-h-screen">
+      <div className="card bg-base-100 shadow-md p-6 max-w-xl mx-auto" data-theme="light">
+        <h1 className="text-2xl font-bold text-primary mb-4">👤 HOD Profile</h1>
+        <div className="space-y-2 text-gray-700">
+          <p><span className="font-semibold">Name:</span> {user?.fullName || "N/A"}</p>
+          <p><span className="font-semibold">Email:</span> {user?.email || "N/A"}</p>
+          <p><span className="font-semibold">Role:</span> HOD</p>
+        </div>
       </div>
-    );
-  };
-  
-  export default HODProfile;
-  
+    </div>
+  );
+};
+
+export default HODProfile;

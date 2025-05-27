@@ -23,7 +23,7 @@ const Register = () => {
     "Architecture",
     "Biomedical Engineering",
     "Environmental Engineering",
-    "Aerospace Engineering"
+    "Aerospace Engineering",
   ];
 
   const [formData, setFormData] = useState({
@@ -54,54 +54,62 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="max-w-xl w-full bg-white p-10 shadow-xl rounded-2xl">
-        <h2 className="text-3xl font-bold text-blue-700 mb-8 text-center">
+    <div className="min-h-screen bg-base-200 flex items-center justify-center px-4">
+      <div className="card w-full max-w-xl bg-base-100 shadow-2xl p-8" data-theme="light">
+        <h2 className="text-3xl font-bold text-center text-primary mb-6">
           Register New Faculty
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="text-sm font-medium text-gray-700">Full Name</label>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Full Name</span>
+            </label>
             <input
               type="text"
               name="fullName"
-              className="w-full mt-1 p-3 border rounded-lg"
+              className="input input-bordered"
               value={formData.fullName}
               onChange={handleChange}
               required
             />
           </div>
 
-          <div>
-            <label className="text-sm font-medium text-gray-700">Email</label>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Email</span>
+            </label>
             <input
               type="email"
               name="email"
-              className="w-full mt-1 p-3 border rounded-lg"
+              className="input input-bordered"
               value={formData.email}
               onChange={handleChange}
               required
             />
           </div>
 
-          <div>
-            <label className="text-sm font-medium text-gray-700">Phone</label>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Phone</span>
+            </label>
             <input
               type="text"
               name="phone"
-              className="w-full mt-1 p-3 border rounded-lg"
+              className="input input-bordered"
               value={formData.phone}
               onChange={handleChange}
               required
             />
           </div>
 
-          <div>
-            <label className="text-sm font-medium text-gray-700">Department</label>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Department</span>
+            </label>
             <select
               name="department"
-              className="w-full mt-1 p-3 border rounded-lg"
+              className="select select-bordered"
               value={formData.department}
               onChange={handleChange}
               required
@@ -113,36 +121,35 @@ const Register = () => {
             </select>
           </div>
 
-          <div>
-            <label className="text-sm font-medium text-gray-700">Password</label>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Password</span>
+            </label>
             <input
               type="password"
               name="password"
-              className="w-full mt-1 p-3 border rounded-lg"
+              className="input input-bordered"
               value={formData.password}
               onChange={handleChange}
               required
             />
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold"
-          >
+          <button type="submit" className="btn btn-primary w-full mt-4">
             ➕ Register Faculty
           </button>
         </form>
 
-        <div className="mt-8 text-center">
-          <p className="text-sm text-gray-600 mb-2">Already have an account?</p>
+        <div className="mt-8 text-center space-y-2">
+          <p className="text-sm text-gray-500">Already have an account?</p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link to="/login" className="bg-gray-100 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200 text-sm">
+            <Link to="/login" className="btn btn-sm btn-neutral">
               👨‍🏫 Login as Faculty
             </Link>
-            <Link to="/login?role=hod" className="bg-purple-100 text-purple-800 px-4 py-2 rounded-lg hover:bg-purple-200 text-sm">
+            <Link to="/login?role=hod" className="btn btn-sm btn-accent">
               🧑‍💼 Login as HOD
             </Link>
-            <Link to="/admin" className="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg hover:bg-yellow-200 text-sm">
+            <Link to="/admin" className="btn btn-sm btn-warning">
               🛡️ Login as Admin
             </Link>
           </div>

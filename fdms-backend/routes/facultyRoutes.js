@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const bcrypt = require("bcrypt");
 const Faculty = require("../models/Faculty");
 const authorizeRoles = require("../middleware/authorizeRole");
 
@@ -31,7 +32,14 @@ router.post("/", async (req, res) => {
   }
 
   try {
-    const newFaculty = new Faculty(req.body);
+    const { password, ...rest } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newFaculty = new Faculty({
+      ...rest,
+      password: hashedPassword,
+    });
+
     await newFaculty.save();
     res.status(201).json(newFaculty);
   } catch (error) {
@@ -44,8 +52,13 @@ router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const faculty = await Faculty.findOne({ email, password });
+    const faculty = await Faculty.findOne({ email });
     if (!faculty) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    const isMatch = await bcrypt.compare(password, faculty.password);
+    if (!isMatch) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 

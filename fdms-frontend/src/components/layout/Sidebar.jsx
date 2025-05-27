@@ -17,7 +17,7 @@ const Sidebar = () => {
       </h2>
 
       <nav className="space-y-2">
-        {/* Dashboard Link */}
+        {/* Dashboard */}
         {role === "admin" && (
           <Link to="/admin/dashboard" className={linkStyle("/admin/dashboard")}>
             📊 Dashboard
@@ -34,7 +34,7 @@ const Sidebar = () => {
           </Link>
         )}
 
-        {/* Profile Link */}
+        {/* Profile */}
         {(role === "faculty" || role === "admin") && (
           <Link
             to={role === "admin" ? "/admin/profile" : "/profile"}
@@ -44,28 +44,26 @@ const Sidebar = () => {
           </Link>
         )}
 
-        {/* Research Link */}
+        {/* Research */}
         {role === "faculty" && (
           <Link to="/research" className={linkStyle("/research")}>
             📚 Research
           </Link>
         )}
-        {role === "admin" && (
-          <Link to="/admin/research" className={linkStyle("/admin/research")}>
-            📚 Research
-          </Link>
-        )}
-        {role === "hod" && (
+        {(role === "admin" || role === "hod") && (
           <Link to="/admin/research" className={linkStyle("/admin/research")}>
             📚 Research
           </Link>
         )}
 
-        {/* Admin-only Links */}
+        {/* Admin-only */}
         {role === "admin" && (
           <>
             <Link to="/admin/faculty-profile" className={linkStyle("/admin/faculty-profile")}>
               👥 Faculty
+            </Link>
+            <Link to="/admin/development" className={linkStyle("/admin/development")}>
+              🧠 Development
             </Link>
             <Link to="/admin/reports" className={linkStyle("/admin/reports")}>
               📑 Reports
@@ -76,7 +74,7 @@ const Sidebar = () => {
           </>
         )}
 
-        {/* HOD-only Reports Access */}
+        {/* HOD-only */}
         {role === "hod" && (
           <Link to="/admin/reports" className={linkStyle("/admin/reports")}>
             📑 Reports

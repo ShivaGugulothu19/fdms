@@ -45,163 +45,77 @@ const Profile = () => {
     }
   };
 
+  const inputClass = "input input-bordered w-full";
+
   const renderStep = () => {
     switch (step) {
       case 0:
         return (
           <>
-            <input
-              type="text"
-              placeholder="Full Name"
-              value={formData.fullName}
-              onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-              className="w-full px-4 py-2 border rounded-lg"
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-4 py-2 border rounded-lg"
-            />
-            <input
-              type="text"
-              placeholder="Phone"
-              value={formData.phone}
-              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              className="w-full px-4 py-2 border rounded-lg"
-            />
-            <input
-              type="text"
-              placeholder="Address"
-              value={formData.address}
-              onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-              className="w-full px-4 py-2 border rounded-lg"
-            />
-            <input
-              type="text"
-              placeholder="Aadhar Number"
-              value={formData.aadhar}
-              onChange={(e) => setFormData({ ...formData, aadhar: e.target.value })}
-              className="w-full px-4 py-2 border rounded-lg"
-            />
+            <input type="text" placeholder="Full Name" value={formData.fullName} onChange={(e) => setFormData({ ...formData, fullName: e.target.value })} className={inputClass} />
+            <input type="email" placeholder="Email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className={inputClass} />
+            <input type="text" placeholder="Phone" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className={inputClass} />
+            <input type="text" placeholder="Address" value={formData.address} onChange={(e) => setFormData({ ...formData, address: e.target.value })} className={inputClass} />
+            <input type="text" placeholder="Aadhar Number" value={formData.aadhar} onChange={(e) => setFormData({ ...formData, aadhar: e.target.value })} className={inputClass} />
           </>
         );
-
       case 1:
         return (
           <>
-            <input
-              type="text"
-              placeholder="Degree"
-              value={formData.degree}
-              onChange={(e) => setFormData({ ...formData, degree: e.target.value })}
-              className="w-full px-4 py-2 border rounded-lg"
-            />
-            <input
-              type="text"
-              placeholder="Institution"
-              value={formData.institution}
-              onChange={(e) => setFormData({ ...formData, institution: e.target.value })}
-              className="w-full px-4 py-2 border rounded-lg"
-            />
-            <input
-              type="text"
-              placeholder="Year of Completion"
-              value={formData.year}
-              onChange={(e) => setFormData({ ...formData, year: e.target.value })}
-              className="w-full px-4 py-2 border rounded-lg"
-            />
-            <input
-              type="text"
-              placeholder="Specialization"
-              value={formData.specialization}
-              onChange={(e) => setFormData({ ...formData, specialization: e.target.value })}
-              className="w-full px-4 py-2 border rounded-lg"
-            />
+            <input type="text" placeholder="Degree" value={formData.degree} onChange={(e) => setFormData({ ...formData, degree: e.target.value })} className={inputClass} />
+            <input type="text" placeholder="Institution" value={formData.institution} onChange={(e) => setFormData({ ...formData, institution: e.target.value })} className={inputClass} />
+            <input type="text" placeholder="Year of Completion" value={formData.year} onChange={(e) => setFormData({ ...formData, year: e.target.value })} className={inputClass} />
+            <input type="text" placeholder="Specialization" value={formData.specialization} onChange={(e) => setFormData({ ...formData, specialization: e.target.value })} className={inputClass} />
           </>
         );
-
       case 2:
         return (
           <>
-            <input
-              type="text"
-              placeholder="Job Title"
-              value={formData.jobTitle}
-              onChange={(e) => setFormData({ ...formData, jobTitle: e.target.value })}
-              className="w-full px-4 py-2 border rounded-lg"
-            />
-            <input
-              type="text"
-              placeholder="Organization"
-              value={formData.organization}
-              onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
-              className="w-full px-4 py-2 border rounded-lg"
-            />
-            <input
-              type="date"
-              placeholder="Start Date"
-              value={formData.startDate}
-              onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-              className="w-full px-4 py-2 border rounded-lg"
-            />
-            <input
-              type="date"
-              placeholder="End Date"
-              value={formData.endDate}
-              onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-              className="w-full px-4 py-2 border rounded-lg"
-            />
+            <input type="text" placeholder="Job Title" value={formData.jobTitle} onChange={(e) => setFormData({ ...formData, jobTitle: e.target.value })} className={inputClass} />
+            <input type="text" placeholder="Organization" value={formData.organization} onChange={(e) => setFormData({ ...formData, organization: e.target.value })} className={inputClass} />
+            <input type="date" placeholder="Start Date" value={formData.startDate} onChange={(e) => setFormData({ ...formData, startDate: e.target.value })} className={inputClass} />
+            <input type="date" placeholder="End Date" value={formData.endDate} onChange={(e) => setFormData({ ...formData, endDate: e.target.value })} className={inputClass} />
           </>
         );
-
       case 3:
         return (
           <>
-            <label className="block mb-2">Upload CV</label>
-            <input
-              type="file"
-              onChange={(e) => setFormData({ ...formData, cv: e.target.files[0] })}
-              className="w-full"
-            />
-            <label className="block my-2">Degree Certificate</label>
-            <input
-              type="file"
-              onChange={(e) => setFormData({ ...formData, degreeCertificate: e.target.files[0] })}
-              className="w-full"
-            />
-            <label className="block my-2">Appointment Letter</label>
-            <input
-              type="file"
-              onChange={(e) => setFormData({ ...formData, appointmentLetter: e.target.files[0] })}
-              className="w-full"
-            />
+            <div className="form-control">
+              <label className="label">Upload CV</label>
+              <input type="file" className="file-input file-input-bordered w-full" onChange={(e) => setFormData({ ...formData, cv: e.target.files[0] })} />
+            </div>
+            <div className="form-control">
+              <label className="label">Degree Certificate</label>
+              <input type="file" className="file-input file-input-bordered w-full" onChange={(e) => setFormData({ ...formData, degreeCertificate: e.target.files[0] })} />
+            </div>
+            <div className="form-control">
+              <label className="label">Appointment Letter</label>
+              <input type="file" className="file-input file-input-bordered w-full" onChange={(e) => setFormData({ ...formData, appointmentLetter: e.target.files[0] })} />
+            </div>
           </>
         );
-
       default:
         return null;
     }
   };
 
   return (
-    <div className="min-h-screen bg-white px-4 py-10">
-      <div className="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-md border">
-        <h2 className="text-3xl font-bold text-center mb-8">Faculty Profile Setup</h2>
+    <div className="min-h-screen bg-base-200 px-4 py-10">
+      <div className="max-w-3xl mx-auto bg-base-100 p-8 rounded-xl shadow-xl" data-theme="light">
+        <h2 className="text-3xl font-bold text-center mb-8 text-primary">Faculty Profile Setup</h2>
 
-        {/* Stepper UI */}
-        <div className="flex justify-between mb-6">
+        {/* Stepper */}
+        <div className="flex justify-between mb-10">
           {steps.map((label, i) => (
             <div key={i} className="flex-1 text-center">
               <div
                 className={`w-10 h-10 mx-auto rounded-full flex items-center justify-center font-bold text-sm ${
-                  i === step ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
+                  i === step ? "bg-primary text-white" : "bg-base-300 text-gray-600"
                 }`}
               >
                 {i + 1}
               </div>
-              <p className="text-xs mt-2 text-gray-600">{label}</p>
+              <p className="text-xs mt-2">{label}</p>
             </div>
           ))}
         </div>
@@ -212,22 +126,17 @@ const Profile = () => {
           <button
             onClick={back}
             disabled={step === 0}
-            className="px-6 py-2 bg-gray-100 border rounded-lg hover:bg-gray-200 disabled:opacity-50"
+            className="btn btn-outline"
           >
             ⬅ Back
           </button>
+
           {step === steps.length - 1 ? (
-            <button
-              onClick={handleSubmit}
-              className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-            >
+            <button onClick={handleSubmit} className="btn btn-success">
               ✅ Submit
             </button>
           ) : (
-            <button
-              onClick={next}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
+            <button onClick={next} className="btn btn-primary">
               Next ➡
             </button>
           )}

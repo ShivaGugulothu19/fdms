@@ -17,6 +17,7 @@ import AdminFacultyProfile from "../pages/AdminFacultyProfile";
 import AdminReports from "../pages/AdminReports";
 import AdminSettings from "../pages/AdminSettings";
 import AdminResearch from "../pages/AdminResearch";
+import AdminDevelopment from "../pages/AdminDevelopment"; // ✅ Added
 
 // HOD Pages
 import HODDashboard from "../pages/HODDashboard";
@@ -56,9 +57,10 @@ const AppRoutes = () => {
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/profile" element={<Profile />} />
           <Route path="/admin/faculty-profile" element={<AdminFacultyProfile />} />
+          <Route path="/admin/research" element={<AdminResearch />} />
+          <Route path="/admin/development" element={<AdminDevelopment />} /> {/* ✅ New */}
           <Route path="/admin/reports" element={<AdminReports />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
-          <Route path="/admin/research" element={<AdminResearch />} />
         </Route>
       )}
 

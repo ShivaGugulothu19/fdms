@@ -1,6 +1,14 @@
 const mongoose = require("mongoose");
 
 const ProfileSchema = new mongoose.Schema({
+  // 🔗 Reference to the Faculty document
+  facultyId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Faculty",
+    required: true,
+  },
+
+  // Personal Info
   fullName: String,
   email: String,
   phone: String,
