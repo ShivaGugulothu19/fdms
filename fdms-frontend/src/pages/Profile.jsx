@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "../api/axiosInstance";
-import { useAuth } from "../context/AuthContext"; // make sure this is correctly implemented
+import { useAuth } from "../context/AuthContext";
 
 const steps = ["Personal Info", "Qualifications", "Experience", "Documents"];
 
@@ -46,7 +46,7 @@ const Profile = () => {
         data.append(key, value);
       });
 
-      await axios.post(`https://fdms-sc8b.onrender.com/api/profile", data, {
+      await axios.post(`https://fdms-sc8b.onrender.com/api/profile`, data, {
         headers: {
           "x-role": "faculty",
           "x-department": user?.department,
