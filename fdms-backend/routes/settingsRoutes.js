@@ -3,7 +3,7 @@ const router = express.Router();
 const Settings = require("../models/Settings");
 const authorizeRoles = require("../middleware/authorizeRole");
 
-// GET current settings
+// GET current settings (admin only)
 router.get("/", authorizeRoles("admin"), async (req, res) => {
   try {
     const settings = await Settings.findOne() || {};
@@ -13,7 +13,7 @@ router.get("/", authorizeRoles("admin"), async (req, res) => {
   }
 });
 
-// POST or update settings
+// POST or update settings (admin only)
 router.post("/", authorizeRoles("admin"), async (req, res) => {
   try {
     const updated = await Settings.findOneAndUpdate({}, req.body, {

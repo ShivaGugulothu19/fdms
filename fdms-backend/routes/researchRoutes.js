@@ -7,7 +7,14 @@ const router = express.Router();
 // 📖 GET all research (admin & hod)
 router.get("/", authorizeRoles("admin", "hod"), async (req, res) => {
   try {
-    const researchList = await Research.find().populate("facultyId");
+    let researchList = await Research.find().populate("facultyId");
+
+    if (req.user.role === "hod") {
+      researchList = researchList.filter(
+        (r) => r.facultyId?.department === req.user.department
+      );
+    }
+
     res.json(researchList);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch research" });
@@ -40,7 +47,7 @@ router.post("/", authorizeRoles("faculty"), async (req, res) => {
   }
 });
 
-// 🧽 PUT update research (admin only)
+// ✏️ PUT update research (admin only)
 router.put("/:id", authorizeRoles("admin"), async (req, res) => {
   try {
     const updated = await Research.findByIdAndUpdate(req.params.id, req.body, { new: true });

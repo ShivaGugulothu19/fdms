@@ -1,4 +1,3 @@
-// src/context/AuthContext.jsx
 import { createContext, useContext, useState } from "react";
 
 export const AuthContext = createContext();
@@ -8,14 +7,17 @@ export const AuthProvider = ({ children }) => {
     const saved = localStorage.getItem("user");
     const role = localStorage.getItem("role");
 
-    if (role === "admin") return { email: "admin@fdms.com", role: "admin" };
+    if (role === "admin") {
+      return { email: "admin@fdms.com", role: "admin" };
+    }
 
     if (saved) {
       const parsed = JSON.parse(saved);
       return {
         ...parsed,
-        id: parsed._id || parsed.id, // normalize _id to id
+        id: parsed._id || parsed.id,
         role,
+        department: parsed.department || "", // normalize department
       };
     }
 
@@ -25,7 +27,8 @@ export const AuthProvider = ({ children }) => {
   const login = (userData) => {
     const normalized = {
       ...userData,
-      id: userData._id || userData.id, // normalize _id to id
+      id: userData._id || userData.id,
+      department: userData.department || "", // ensure department is stored
     };
 
     setUser(normalized);

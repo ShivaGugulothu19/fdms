@@ -1,8 +1,10 @@
-// AdminResearch.jsx (Full with Edit Modal)
+// src/pages/AdminResearch.jsx
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 
 const AdminResearch = ({ readOnly = false }) => {
+  const { user } = useAuth();
   const [allResearch, setAllResearch] = useState([]);
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
@@ -11,7 +13,8 @@ const AdminResearch = ({ readOnly = false }) => {
   const [editing, setEditing] = useState(null);
   const [formData, setFormData] = useState({});
 
-  const role = localStorage.getItem("role");
+  const role = user?.role || "admin"; // default to admin if not present
+  const department = user?.department || "";
 
   useEffect(() => {
     fetchResearch();
@@ -19,11 +22,16 @@ const AdminResearch = ({ readOnly = false }) => {
 
   const fetchResearch = async () => {
     try {
-      const res = await axios.get("/api/research", {
-        headers: { "x-role": role },
+      const res = await axios.get("http://localhost:5000/api/research", {
+        headers: {
+          "x-role": role,
+          "x-department": department,
+          "x-user-id": user?.id || user?._id || "",
+        },
       });
       setAllResearch(res.data);
-    } catch {
+    } catch (err) {
+      console.error("❌ Fetch error:", err);
       setError("Failed to load research");
     } finally {
       setLoading(false);
@@ -35,8 +43,12 @@ const AdminResearch = ({ readOnly = false }) => {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(`/api/research/${id}`, {
-        headers: { "x-role": role },
+      await axios.delete(`http://localhost:5000/api/research/${id}`, {
+        headers: {
+          "x-role": role,
+          "x-department": department,
+          "x-user-id": user?.id || user?._id || "",
+        },
       });
       setAllResearch((prev) => prev.filter((r) => r._id !== id));
     } catch (err) {
@@ -58,8 +70,12 @@ const AdminResearch = ({ readOnly = false }) => {
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`/api/research/${editing._id}`, formData, {
-        headers: { "x-role": role },
+      await axios.put(`http://localhost:5000/api/research/${editing._id}`, formData, {
+        headers: {
+          "x-role": role,
+          "x-department": department,
+          "x-user-id": user?.id || user?._id || "",
+        },
       });
       setEditing(null);
       fetchResearch();

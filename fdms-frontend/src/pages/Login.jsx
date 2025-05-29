@@ -12,11 +12,16 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // 🔐 Hardcoded Admin login
+    // 🔐 Hardcoded Admin Login
     if (email === "admin@fdms.com" && password === "admin123") {
+      const adminUser = {
+        email,
+        fullName: "Admin",
+        role: "admin"
+      };
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("role", "admin");
-      localStorage.setItem("user", JSON.stringify({ email, fullName: "Admin", role: "admin" }));
+      localStorage.setItem("user", JSON.stringify(adminUser));
       window.location.href = "/admin/dashboard";
       return;
     }
@@ -43,7 +48,7 @@ const Login = () => {
         alert("Unauthorized role");
       }
     } catch (err) {
-      console.error(err);
+      console.error("Login failed:", err);
       alert("Invalid credentials. Please try again.");
     }
   };

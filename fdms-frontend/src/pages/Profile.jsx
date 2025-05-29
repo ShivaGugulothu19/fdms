@@ -1,9 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext"; // make sure this is correctly implemented
 
 const steps = ["Personal Info", "Qualifications", "Experience", "Documents"];
 
 const Profile = () => {
+  const { user } = useAuth();
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -30,23 +32,37 @@ const Profile = () => {
   const back = () => setStep((prev) => Math.max(prev - 1, 0));
 
   const handleSubmit = async () => {
+    const requiredFields = ["fullName", "email", "phone", "aadhar"];
+    for (const field of requiredFields) {
+      if (!formData[field]) {
+        alert(`Please fill in your ${field}`);
+        return;
+      }
+    }
+
     try {
       const data = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
         data.append(key, value);
       });
 
-      const res = await axios.post("http://localhost:5000/api/profile", data);
+      await axios.post("http://localhost:5000/api/profile", data, {
+        headers: {
+          "x-role": "faculty",
+          "x-department": user?.department,
+          "x-user-id": user?._id,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
       alert("Profile submitted successfully ✅");
-      console.log(res.data);
     } catch (err) {
-      console.error(err);
-      alert("Something went wrong!");
+      console.error("Profile submission failed:", err);
+      alert("Something went wrong! Please try again.");
     }
   };
 
   const inputClass = "input input-bordered w-full";
-
   const renderStep = () => {
     switch (step) {
       case 0:
@@ -73,8 +89,8 @@ const Profile = () => {
           <>
             <input type="text" placeholder="Job Title" value={formData.jobTitle} onChange={(e) => setFormData({ ...formData, jobTitle: e.target.value })} className={inputClass} />
             <input type="text" placeholder="Organization" value={formData.organization} onChange={(e) => setFormData({ ...formData, organization: e.target.value })} className={inputClass} />
-            <input type="date" placeholder="Start Date" value={formData.startDate} onChange={(e) => setFormData({ ...formData, startDate: e.target.value })} className={inputClass} />
-            <input type="date" placeholder="End Date" value={formData.endDate} onChange={(e) => setFormData({ ...formData, endDate: e.target.value })} className={inputClass} />
+            <input type="date" value={formData.startDate} onChange={(e) => setFormData({ ...formData, startDate: e.target.value })} className={inputClass} />
+            <input type="date" value={formData.endDate} onChange={(e) => setFormData({ ...formData, endDate: e.target.value })} className={inputClass} />
           </>
         );
       case 3:
@@ -103,42 +119,23 @@ const Profile = () => {
     <div className="min-h-screen bg-base-200 px-4 py-10">
       <div className="max-w-3xl mx-auto bg-base-100 p-8 rounded-xl shadow-xl" data-theme="light">
         <h2 className="text-3xl font-bold text-center mb-8 text-primary">Faculty Profile Setup</h2>
-
-        {/* Stepper */}
         <div className="flex justify-between mb-10">
           {steps.map((label, i) => (
             <div key={i} className="flex-1 text-center">
-              <div
-                className={`w-10 h-10 mx-auto rounded-full flex items-center justify-center font-bold text-sm ${
-                  i === step ? "bg-primary text-white" : "bg-base-300 text-gray-600"
-                }`}
-              >
+              <div className={`w-10 h-10 mx-auto rounded-full flex items-center justify-center font-bold text-sm ${i === step ? "bg-primary text-white" : "bg-base-300 text-gray-600"}`}>
                 {i + 1}
               </div>
               <p className="text-xs mt-2">{label}</p>
             </div>
           ))}
         </div>
-
         <div className="space-y-4">{renderStep()}</div>
-
         <div className="mt-8 flex justify-between">
-          <button
-            onClick={back}
-            disabled={step === 0}
-            className="btn btn-outline"
-          >
-            ⬅ Back
-          </button>
-
+          <button onClick={back} disabled={step === 0} className="btn btn-outline">⬅ Back</button>
           {step === steps.length - 1 ? (
-            <button onClick={handleSubmit} className="btn btn-success">
-              ✅ Submit
-            </button>
+            <button onClick={handleSubmit} className="btn btn-success">✅ Submit</button>
           ) : (
-            <button onClick={next} className="btn btn-primary">
-              Next ➡
-            </button>
+            <button onClick={next} className="btn btn-primary">Next ➡</button>
           )}
         </div>
       </div>

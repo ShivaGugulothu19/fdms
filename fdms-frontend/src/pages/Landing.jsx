@@ -1,4 +1,3 @@
-// src/pages/Landing.jsx
 import React from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -18,6 +17,7 @@ const Landing = () => {
         <div className="flex gap-4">
           <Link to="/register" className="btn btn-sm btn-primary">Register</Link>
           <Link to="/login" className="btn btn-sm btn-secondary">Faculty Login</Link>
+          <Link to="/login?role=hod" className="btn btn-sm btn-accent">HOD Login</Link>
           <Link to="/admin" className="btn btn-sm btn-outline">Admin Login</Link>
         </div>
       </div>
