@@ -25,7 +25,7 @@ const FacultyResearch = () => {
     };
 
     try {
-      await axios.post("http://localhost:5000/api/research", payload, {
+      await await axios.post(`https://fdms-sc8b.onrender.com/api/research", payload, {
         headers: {
           "x-role": "faculty",
           "x-department": user?.department,

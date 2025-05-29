@@ -46,7 +46,7 @@ const Profile = () => {
         data.append(key, value);
       });
 
-      await axios.post("http://localhost:5000/api/profile", data, {
+      await axios.post(`https://fdms-sc8b.onrender.com/api/profile", data, {
         headers: {
           "x-role": "faculty",
           "x-department": user?.department,

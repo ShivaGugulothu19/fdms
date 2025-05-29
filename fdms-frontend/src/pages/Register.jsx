@@ -44,7 +44,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/faculty", formData);
+      await axios.post(`https://fdms-sc8b.onrender.com/api/faculty", formData);
       alert("Faculty registered successfully ✅");
       navigate("/login");
     } catch (err) {

@@ -27,7 +27,7 @@ const Login = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:5000/api/faculty/login", {
+      await axios.post(`https://fdms-sc8b.onrender.com/api/faculty/login", {
         email,
         password,
       });
