@@ -12,26 +12,42 @@ const allowedDepartments = [
   "Humanities", "Architecture", "Biomedical Engineering", "Environmental Engineering", "Aerospace Engineering"
 ];
 
-// Register Faculty
+// ✅ Register Faculty
 router.post("/", async (req, res) => {
-  if (!allowedDepartments.includes(req.body.department)) {
+  const { fullName, email, phone, department, password } = req.body;
+
+  // 🔍 Basic validation
+  if (!fullName || !email || !phone || !department || !password) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
+  // ✅ Department check
+  if (!allowedDepartments.includes(department)) {
     return res.status(400).json({ message: "Invalid department selected" });
   }
 
   try {
-    const { password, ...rest } = req.body;
+    // ✅ Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newFaculty = new Faculty({ ...rest, password: hashedPassword });
-    await newFaculty.save();
+    const newFaculty = new Faculty({
+      fullName,
+      email,
+      phone,
+      department,
+      password: hashedPassword,
+      role: "faculty"
+    });
 
+    await newFaculty.save();
     res.status(201).json(newFaculty);
   } catch (error) {
+    console.error("❌ Error saving faculty:", error);
     res.status(500).json({ message: "Error saving faculty", error });
   }
 });
 
-// Login: Faculty / HOD / Admin
+// ✅ Login (Faculty / HOD / Admin)
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -42,7 +58,6 @@ router.post("/login", async (req, res) => {
     const isMatch = await bcrypt.compare(password, faculty.password);
     if (!isMatch) return res.status(401).json({ message: "Invalid email or password" });
 
-    // No JWT — return user info only
     res.status(200).json({
       message: "Login successful",
       user: {
@@ -54,22 +69,24 @@ router.post("/login", async (req, res) => {
       },
     });
   } catch (error) {
+    console.error("❌ Login failed:", error);
     res.status(500).json({ message: "Login failed", error });
   }
 });
 
-// GET all faculty (admin/hod)
+// ✅ Get all faculty (admin or HOD)
 router.get("/", authorizeRoles("admin", "hod"), async (req, res) => {
   try {
     const query = req.user.role === "hod" ? { department: req.user.department } : {};
     const facultyList = await Faculty.find(query);
     res.status(200).json(facultyList);
   } catch (error) {
+    console.error("❌ Fetching faculty failed:", error);
     res.status(500).json({ message: "Error fetching faculty", error });
   }
 });
 
-// GET one faculty
+// ✅ Get one faculty by ID
 router.get("/:id", authorizeRoles("admin", "hod"), async (req, res) => {
   try {
     const faculty = await Faculty.findById(req.params.id);
@@ -81,11 +98,12 @@ router.get("/:id", authorizeRoles("admin", "hod"), async (req, res) => {
 
     res.status(200).json(faculty);
   } catch (error) {
+    console.error("❌ Error fetching faculty:", error);
     res.status(500).json({ message: "Error fetching faculty", error });
   }
 });
 
-// DELETE faculty (admin only)
+// ✅ Delete faculty (admin only)
 router.delete("/:id", authorizeRoles("admin"), async (req, res) => {
   try {
     const deleted = await Faculty.findByIdAndDelete(req.params.id);
@@ -93,6 +111,7 @@ router.delete("/:id", authorizeRoles("admin"), async (req, res) => {
 
     res.status(200).json({ message: "Faculty deleted" });
   } catch (error) {
+    console.error("❌ Error deleting faculty:", error);
     res.status(500).json({ message: "Error deleting faculty", error });
   }
 });
