@@ -10,9 +10,17 @@ const AdminLogin = () => {
     e.preventDefault();
 
     if (email === "admin@fdms.com" && password === "admin123") {
+      const adminUser = {
+        email: "admin@fdms.com",
+        fullName: "Admin",
+        role: "admin",
+      };
+
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("role", "admin");
-      window.location.href = "/admin/dashboard";
+      localStorage.setItem("user", JSON.stringify(adminUser));
+
+      navigate("/admin/dashboard");
     } else {
       alert("Invalid credentials ❌");
     }

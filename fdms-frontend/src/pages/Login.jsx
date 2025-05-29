@@ -6,19 +6,14 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const location = useLocation();
-
   const isHOD = new URLSearchParams(location.search).get("role") === "hod";
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // 🔐 Hardcoded Admin Login
+    // 🔐 Admin Login (hardcoded)
     if (email === "admin@fdms.com" && password === "admin123") {
-      const adminUser = {
-        email,
-        fullName: "Admin",
-        role: "admin"
-      };
+      const adminUser = { email, fullName: "Admin", role: "admin" };
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("role", "admin");
       localStorage.setItem("user", JSON.stringify(adminUser));
@@ -33,6 +28,7 @@ const Login = () => {
       });
 
       const user = res.data.user;
+      if (!user) throw new Error("No user data returned");
 
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("role", user.role);

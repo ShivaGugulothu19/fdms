@@ -1,4 +1,3 @@
-// src/pages/AdminResearch.jsx
 import { useEffect, useState } from "react";
 import axios from "../api/axiosInstance";
 import { useAuth } from "../context/AuthContext";
@@ -13,7 +12,7 @@ const AdminResearch = ({ readOnly = false }) => {
   const [editing, setEditing] = useState(null);
   const [formData, setFormData] = useState({});
 
-  const role = user?.role || "admin"; // default to admin if not present
+  const role = user?.role || "admin";
   const department = user?.department || "";
 
   useEffect(() => {
@@ -22,11 +21,11 @@ const AdminResearch = ({ readOnly = false }) => {
 
   const fetchResearch = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/research", {
+      const res = await axios.get("/api/research", {
         headers: {
           "x-role": role,
           "x-department": department,
-          "x-user-id": user?.id || user?._id || "",
+          "x-user-id": user?._id || "",
         },
       });
       setAllResearch(res.data);
@@ -43,11 +42,11 @@ const AdminResearch = ({ readOnly = false }) => {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/research/${id}`, {
+      await axios.delete(`/api/research/${id}`, {
         headers: {
           "x-role": role,
           "x-department": department,
-          "x-user-id": user?.id || user?._id || "",
+          "x-user-id": user?._id || "",
         },
       });
       setAllResearch((prev) => prev.filter((r) => r._id !== id));
@@ -70,11 +69,11 @@ const AdminResearch = ({ readOnly = false }) => {
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`http://localhost:5000/api/research/${editing._id}`, formData, {
+      await axios.put(`/api/research/${editing._id}`, formData, {
         headers: {
           "x-role": role,
           "x-department": department,
-          "x-user-id": user?.id || user?._id || "",
+          "x-user-id": user?._id || "",
         },
       });
       setEditing(null);
@@ -85,13 +84,11 @@ const AdminResearch = ({ readOnly = false }) => {
     }
   };
 
-  const filtered = allResearch.filter((r) => {
-    return (
-      (r.title?.toLowerCase().includes(search.toLowerCase()) ||
-        r.facultyId?.fullName?.toLowerCase().includes(search.toLowerCase())) &&
-      (!typeFilter || r.type === typeFilter)
-    );
-  });
+  const filtered = allResearch.filter((r) =>
+    (r.title?.toLowerCase().includes(search.toLowerCase()) ||
+      r.facultyId?.fullName?.toLowerCase().includes(search.toLowerCase())) &&
+    (!typeFilter || r.type === typeFilter)
+  );
 
   const handleChange = (e) => {
     const { name, value } = e.target;

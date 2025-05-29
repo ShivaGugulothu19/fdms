@@ -8,23 +8,28 @@ const AdminSettings = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
+  const role = localStorage.getItem("role");
+
   useEffect(() => {
     axios
-      .get("/api/settings", { headers: { "x-role": localStorage.getItem("role") } })
+      .get("/api/settings", { headers: { "x-role": role } })
       .then((res) => {
-        setAcademicYear(res.data.academicYear || "");
-        setEmailNotifications(res.data.emailNotifications || false);
-        setPortalMode(res.data.portalMode || "Live");
+        const data = res.data || {};
+        setAcademicYear(data.academicYear || "");
+        setEmailNotifications(data.emailNotifications || false);
+        setPortalMode(data.portalMode || "Live");
       })
       .catch((err) => console.error("❌ Failed to load settings:", err))
       .finally(() => setLoading(false));
-  }, []);
+  }, [role]);
 
   const handleSave = async () => {
     const payload = { academicYear, emailNotifications, portalMode };
     setSaving(true);
     try {
-      await axios.post("/api/settings", payload, { headers: { "x-role": localStorage.getItem("role") } });
+      await axios.post("/api/settings", payload, {
+        headers: { "x-role": role },
+      });
       alert("✅ Settings saved successfully");
     } catch (err) {
       console.error("❌ Failed to save settings:", err);
@@ -91,7 +96,7 @@ const AdminSettings = () => {
           )}
         </div>
 
-        {/* User Roles */}
+        {/* Role Summary */}
         <div className="bg-gray-800 rounded-lg p-5 shadow">
           <h3 className="text-xl font-semibold text-green-400 mb-3">👥 Role Access Overview</h3>
           <ul className="list-disc pl-6 text-gray-300 space-y-2 text-sm">

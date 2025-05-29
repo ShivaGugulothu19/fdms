@@ -15,7 +15,7 @@ const AdminFacultyProfile = () => {
 
   const fetchProfiles = async () => {
     try {
-      const res = await axios.get("/api/profile/all", {
+      const res = await axios.get(`https://fdms-sc8b.onrender.com/api/profile/all`, {
         headers: { "x-role": role },
       });
       setProfiles(Array.isArray(res.data) ? res.data : []);
@@ -38,7 +38,7 @@ const AdminFacultyProfile = () => {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(`/api/profile/${id}`, {
+      await axios.delete(`https://fdms-sc8b.onrender.com/api/profile/${id}`, {
         headers: { "x-role": role },
       });
       setProfiles((prev) => prev.filter((p) => p._id !== id));
@@ -64,8 +64,11 @@ const AdminFacultyProfile = () => {
       Object.entries(formData).forEach(([key, value]) => data.append(key, value));
       Object.entries(files).forEach(([key, file]) => data.append(key, file));
 
-      await axios.put(`/api/profile/${editingProfile._id}`, data, {
-        headers: { "x-role": role, "Content-Type": "multipart/form-data" },
+      await axios.put(`https://fdms-sc8b.onrender.com/api/profile/${editingProfile._id}`, data, {
+        headers: {
+          "x-role": role,
+          "Content-Type": "multipart/form-data"
+        },
       });
 
       setShowModal(false);
@@ -134,7 +137,6 @@ const AdminFacultyProfile = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-gray-800 p-6 rounded-xl shadow-xl w-full max-w-lg">
             <h3 className="text-xl font-semibold text-white mb-4">Edit Faculty Profile</h3>
-
             <div className="space-y-3">
               <input type="text" name="address" placeholder="Address" value={formData.address || ""} onChange={handleChange} className="w-full px-3 py-2 rounded bg-gray-700 text-white border border-gray-600" />
               <input type="text" name="aadhar" placeholder="Aadhar" value={formData.aadhar || ""} onChange={handleChange} className="w-full px-3 py-2 rounded bg-gray-700 text-white border border-gray-600" />
@@ -149,7 +151,6 @@ const AdminFacultyProfile = () => {
                 <input type="file" name="appointmentLetter" onChange={handleFileChange} className="file-input file-input-bordered w-full" />
               </div>
             </div>
-
             <div className="flex justify-end gap-2 mt-6">
               <button onClick={() => setShowModal(false)} className="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded">Cancel</button>
               <button onClick={handleUpdate} className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded">Save</button>

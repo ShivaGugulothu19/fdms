@@ -12,7 +12,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("/api/faculty", {
+        const res = await axios.get(`https://fdms-sc8b.onrender.com/api/faculty`, {
           headers: { "x-role": role },
         });
         setFacultyList(res.data);
@@ -46,7 +46,7 @@ const AdminDashboard = () => {
     if (!confirm) return;
 
     try {
-      await axios.delete(`/api/faculty/${id}`, {
+      await axios.delete(`https://fdms-sc8b.onrender.com/api/faculty/${id}`, {
         headers: { "x-role": role },
       });
       setFacultyList((prev) => prev.filter((f) => f._id !== id));

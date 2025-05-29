@@ -19,7 +19,7 @@ const AdminReports = ({ readOnly = false }) => {
         const res = await axios.get("/api/reports/summary", {
           headers: {
             "x-role": role,
-            "x-department": department || "", // Include department header for HOD
+            "x-department": department || "",
           },
         });
         setReport({
@@ -41,10 +41,11 @@ const AdminReports = ({ readOnly = false }) => {
   const completionRate = () => {
     const total = report?.totalProfiles || 0;
     const complete =
-      total -
-      ((report?.missingDocuments?.cv || 0) +
+      total - (
+        (report?.missingDocuments?.cv || 0) +
         (report?.missingDocuments?.appointmentLetter || 0) +
-        (report?.missingDocuments?.degreeCertificate || 0));
+        (report?.missingDocuments?.degreeCertificate || 0)
+      );
     return total ? ((complete / total) * 100).toFixed(1) : "0";
   };
 
@@ -60,6 +61,8 @@ const AdminReports = ({ readOnly = false }) => {
           <p className="text-gray-400">Loading report data...</p>
         ) : (
           <div className="space-y-10">
+
+            {/* 🔹 Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
                 { title: "Total Profiles", value: report.totalProfiles, bg: "bg-blue-700" },
@@ -74,11 +77,13 @@ const AdminReports = ({ readOnly = false }) => {
               ))}
             </div>
 
+            {/* 🔹 Completion Rate */}
             <div className="bg-gray-800 rounded-lg p-4 shadow-md text-center">
               <h3 className="text-xl font-semibold text-indigo-400 mb-1">✅ Document Completion Rate</h3>
               <p className="text-4xl font-bold text-indigo-300">{completionRate()}%</p>
             </div>
 
+            {/* 🔹 Research Chart */}
             <div className="bg-gray-800 p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-bold text-purple-300 mb-4">📊 Research Type Distribution</h3>
               {Array.isArray(report.researchByType) && report.researchByType.length > 0 ? (
@@ -96,6 +101,7 @@ const AdminReports = ({ readOnly = false }) => {
               )}
             </div>
 
+            {/* 🔹 Faculty by Department */}
             <div className="bg-gray-800 p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-bold text-teal-300 mb-4">🏫 Faculty by Department</h3>
               {Array.isArray(report.facultyByDepartment) && report.facultyByDepartment.length > 0 ? (
@@ -122,10 +128,12 @@ const AdminReports = ({ readOnly = false }) => {
               )}
             </div>
 
+            {/* 🔹 Degree Certificate */}
             <div className="bg-gray-800 p-6 rounded-lg shadow-md text-center">
               <h3 className="text-xl font-bold text-orange-300 mb-2">🎓 Degree Certificates Missing</h3>
               <p className="text-3xl font-semibold">{report.missingDocuments.degreeCertificate || 0}</p>
             </div>
+
           </div>
         )}
       </div>

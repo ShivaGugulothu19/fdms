@@ -17,7 +17,7 @@ const AdminDevelopment = () => {
 
   const fetchActivities = async () => {
     try {
-      const res = await axios.get("/api/development", {
+      const res = await axios.get(`https://fdms-sc8b.onrender.com/api/development`, {
         headers: { "x-role": role },
       });
       setActivities(res.data);
@@ -31,7 +31,7 @@ const AdminDevelopment = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this activity?")) return;
     try {
-      await axios.delete(`/api/development/${id}`, {
+      await axios.delete(`https://fdms-sc8b.onrender.com/api/development/${id}`, {
         headers: { "x-role": role },
       });
       setActivities((prev) => prev.filter((a) => a._id !== id));
@@ -53,7 +53,7 @@ const AdminDevelopment = () => {
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`/api/development/${editing._id}`, formData, {
+      await axios.put(`https://fdms-sc8b.onrender.com/api/development/${editing._id}`, formData, {
         headers: { "x-role": role },
       });
       setEditing(null);
