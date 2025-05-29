@@ -1,6 +1,6 @@
 // src/pages/AdminResearch.jsx
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../api/axiosInstance";
 import { useAuth } from "../context/AuthContext";
 
 const AdminResearch = ({ readOnly = false }) => {

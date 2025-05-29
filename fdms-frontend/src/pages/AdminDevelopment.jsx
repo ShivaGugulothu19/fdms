@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../api/axiosInstance";
 
 const AdminDevelopment = () => {
   const [activities, setActivities] = useState([]);
